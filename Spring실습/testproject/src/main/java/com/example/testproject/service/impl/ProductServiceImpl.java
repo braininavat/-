@@ -5,7 +5,9 @@ import com.example.testproject.data.entity.ProductEntity;
 import com.example.testproject.data.handler.ProductDataHandler;
 import com.example.testproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ProductServiceImpl implements ProductService {
 
     ProductDataHandler productDataHandler;

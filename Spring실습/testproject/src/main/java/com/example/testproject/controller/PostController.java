@@ -1,6 +1,8 @@
 package com.example.testproject.controller;
 
 import com.example.testproject.dto.MemberDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -13,8 +15,6 @@ public class PostController {
     public String posthello(){
         return "hello post";
     }
-
-
 
     @PostMapping(value = "/member")
     public String postMember(@RequestBody Map<String,Object> postData) {
@@ -34,4 +34,23 @@ public class PostController {
     }
     //Json으로 Post시 멤버 순서 상관 없고 전달받는 key값이 없으면 Null, DTO에 대응하지 않는 key은 무시
 
+    @PostMapping(value = "/member3")
+    public ResponseEntity<MemberDTO> getMember(
+            @RequestBody MemberDTO memberDTO,
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam String organization){
+
+        return ResponseEntity.status(HttpStatus.OK).body(memberDTO);
+    }
+    //RestTemplate 테스트용
+
+    @PostMapping(value = "/member4")
+    public ResponseEntity<MemberDTO> getMember2r(
+            @RequestHeader("this is header")
+            @RequestBody MemberDTO memberDTO) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(memberDTO);
+    }
+    //RestTemplate 테스트용
 }

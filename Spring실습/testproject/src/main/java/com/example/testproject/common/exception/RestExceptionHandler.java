@@ -1,4 +1,4 @@
-package com.example.testproject.exception;
+package com.example.testproject.common.exception;
 
 
 import org.slf4j.Logger;
@@ -37,4 +37,16 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(map,responseHeaders,httpStatus);
     }
 
+    @ExceptionHandler(value = CustomException.class)
+    //특정 예외 클래스를 지정하면 해당 예외 발생시, 이 메서드가 처리함
+    public ResponseEntity<Map<String,String>> ExceptionHandler(CustomException e){
+        HttpHeaders responseHeaders = new HttpHeaders();
+
+        Map<String,String> map = new HashMap<>();
+        map.put("error type",e.getHttpStatusType());
+        map.put("code", Integer.toString(e.getHttpStatusCode()));
+        map.put("message",e.getMessage());
+
+        return new ResponseEntity<>(map,responseHeaders,e.getHttpStatus());
+    }
 }
