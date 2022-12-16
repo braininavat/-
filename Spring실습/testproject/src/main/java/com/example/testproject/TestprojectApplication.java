@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories("com.example.testproject.data.repository")
 //Repository를 인식 못하면 @EnableJpaRepositories 추가해줌
 public class TestprojectApplication {
 

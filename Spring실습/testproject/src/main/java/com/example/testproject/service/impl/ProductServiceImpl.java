@@ -4,11 +4,15 @@ import com.example.testproject.data.dto.ProductDto;
 import com.example.testproject.data.entity.ProductEntity;
 import com.example.testproject.data.handler.ProductDataHandler;
 import com.example.testproject.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     ProductDataHandler productDataHandler;
     //Handler = 추가적인 처리가 필요할 때 옵션 사항.
@@ -19,13 +23,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto saveProduct(String productId, String productName, int productPrice, int productStock) {
-        ProductEntity productEntity = null;//productDatahandler.saveProductEntity()
+    public ProductDto saveProduct(String productID, String productName, int productPrice, int productStock) {
 
-        ProductDto productDto = new ProductDto(productEntity.getProductID(),
-                productEntity.getProductName(),
-                productEntity.getProductPrice(),
-                productEntity.getProductStock());
+       ProductEntity product = productDataHandler.saveProductEntity(productID,productName,productPrice,productStock);
+
+        ProductDto productDto = new ProductDto(product.getProductID(),
+                product.getProductName(),
+                product.getProductPrice(),
+                product.getProductStock());
 
         return productDto;
     }
@@ -36,6 +41,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto getProduct(String productId) {
-        return null;
+        LOGGER.info("[getProduct] productDataHandler 로 상품 정보 조회 요청");
+        ProductEntity product = productDataHandler.getProductEntity(productId);
+
+        LOGGER.info("[getProduct] Entity 객체를 DTO 객체로 변환 작업. productId : {}",
+                product.getProductID());
+        ProductDto productDto = new ProductDto(product.getProductID(),
+                product.getProductName(), product.getProductPrice(),
+                product.getProductStock());
+
+        return productDto;
     }
 }
