@@ -1,4 +1,4 @@
-package com.example.testproject.dto;
+package com.example.testproject.data.dto;
 
 public class MemberDTO {
 

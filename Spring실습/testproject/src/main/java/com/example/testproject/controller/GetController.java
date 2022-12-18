@@ -1,7 +1,7 @@
 package com.example.testproject.controller;
 
 
-import com.example.testproject.dto.MemberDTO;
+import com.example.testproject.data.dto.MemberDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;

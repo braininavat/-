@@ -1,6 +1,6 @@
 package com.example.testproject.service;
 
-import com.example.testproject.dto.MemberDTO;
+import com.example.testproject.data.dto.MemberDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface RestTemplateService {

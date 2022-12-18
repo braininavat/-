@@ -1,6 +1,6 @@
 package com.example.testproject.service.impl;
 
-import com.example.testproject.dto.MemberDTO;
+import com.example.testproject.data.dto.MemberDTO;
 import com.example.testproject.service.RestTemplateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
