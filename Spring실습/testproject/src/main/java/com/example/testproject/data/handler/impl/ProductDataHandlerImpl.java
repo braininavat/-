@@ -1,6 +1,6 @@
 package com.example.testproject.data.handler.impl;
 
-import com.example.testproject.data.dao.ProductDao;
+import com.example.testproject.data.dao.ProductDAO;
 import com.example.testproject.data.entity.ProductEntity;
 import com.example.testproject.data.handler.ProductDataHandler;
 import jakarta.transaction.Transactional;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class ProductDataHandlerImpl implements ProductDataHandler {
 
-    ProductDao productDao;
+    ProductDAO productDao;
 
     @Autowired
-    public ProductDataHandlerImpl(ProductDao productdao){
+    public ProductDataHandlerImpl(ProductDAO productdao){
 
         this.productDao = productdao;
     }

@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,11 +17,11 @@ public class ShortUrlController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ShortUrlController.class);
 
-    @Value("$.{testproject.short.url.id}")
+    @Value("${testproject.short.url.id}")
     //application.properties 에 정의된 값을 불러온다
     private String CLIENT_ID;
 
-    @Value("$.{testproject.short.url.secret}")
+    @Value("${testproject.short.url.secret}")
     private String CLIENT_SECRET;
 
     ShortUrlService shortUrlService;
@@ -47,7 +49,14 @@ public class ShortUrlController {
     public ShortUrlResponseDTO updateShortUrl(String originalUrl){return null;}
 
     @DeleteMapping("/")
-    public ShortUrlResponseDTO deleteShortUrl(String url){return null;}
+    public ResponseEntity<String> deleteShortUrl(String url){
+        try{
+            shortUrlService.deleteByShortUrl(url);
+        }catch (RuntimeException e){
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("url 삭제완료");
+    }
 
 
 }

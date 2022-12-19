@@ -13,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table(name = "product")//테이블 자동 생성
-public class ProductEntity {
+public class ProductEntity extends BaseEntity{
 
     @Id 
      // PK 설정하는 어노테이션, 반드시 jakarta.persistence.id 를 import 할것
