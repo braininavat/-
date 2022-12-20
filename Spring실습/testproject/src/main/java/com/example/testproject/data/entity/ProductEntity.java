@@ -12,6 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 @Table(name = "product")//테이블 자동 생성
 public class ProductEntity extends BaseEntity{
 
