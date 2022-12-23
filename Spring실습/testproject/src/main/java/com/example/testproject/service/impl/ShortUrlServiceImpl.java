@@ -4,6 +4,7 @@ import com.example.testproject.data.dao.ShortUrlDAO;
 import com.example.testproject.data.dto.NaverUriDTO;
 import com.example.testproject.data.dto.ShortUrlResponseDTO;
 import com.example.testproject.data.entity.ShortUrlEntity;
+import com.example.testproject.data.repository.ShortUrlRedisRepository;
 import com.example.testproject.data.repository.ShortUrlRepository;
 import com.example.testproject.service.ShortUrlService;
 import org.slf4j.Logger;
@@ -16,18 +17,21 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 public class ShortUrlServiceImpl implements ShortUrlService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ShortUrlServiceImpl.class);
     private final ShortUrlDAO shortUrlDAO;
-    //private final ShortUrlRedisRepository shortUrlRedisRepository;
+
+    //Cache 사용
+    private final ShortUrlRedisRepository shortUrlRedisRepository;
 
     @Autowired
-    ShortUrlServiceImpl(ShortUrlDAO shortUrlDAO, ShortUrlRepository shortUrlRedisRepository){
+    ShortUrlServiceImpl(ShortUrlDAO shortUrlDAO, ShortUrlRedisRepository shortUrlRedisRepository){
         this.shortUrlDAO = shortUrlDAO;
-        //this.shortUrlRedisRepository = shortUrlRedisRepository;
+        this.shortUrlRedisRepository = shortUrlRedisRepository;
     }
 
 
@@ -39,7 +43,17 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
         String orgUrl;
         String shortUrl;
-    
+
+        //Cache 로직
+        Optional<ShortUrlResponseDTO> foundResponseDTO = shortUrlRedisRepository.findById(originalUrl);
+        if(foundResponseDTO.isPresent()){
+            LOGGER.info("[getShorturl] Cache Data is existed");
+            return foundResponseDTO.get();
+        } else{
+            LOGGER.info("[getShortURL] cache Data not existed");
+        }
+
+
         //값이 없으면 Generate 해주는 역할 수행
         if (getShortUrl == null) {
             LOGGER.info("[getShortUrl] No Entity in Database.");
@@ -64,7 +78,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
         ShortUrlResponseDTO shortUrlResponseDto = new ShortUrlResponseDTO(orgUrl, shortUrl);
 
-        //shortUrlRedisRepository.save(shortUrlResponseDto);
+        shortUrlRedisRepository.save(shortUrlResponseDto);
 
         LOGGER.info("[getShortUrl] Response DTO : {}", shortUrlResponseDto);
         return shortUrlResponseDto;
@@ -89,6 +103,10 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         shortUrlDAO.saveShortUrl(shortUrlEntity);
 
         ShortUrlResponseDTO shortUrlResponseDTO = new ShortUrlResponseDTO(orgUrl, shortUrl);
+
+        //Cache 로직
+        shortUrlRedisRepository.save(shortUrlResponseDTO);
+
         LOGGER.info("[generateShortUrl] Response DTO : {}", shortUrlResponseDTO);
         return shortUrlResponseDTO;
     }
